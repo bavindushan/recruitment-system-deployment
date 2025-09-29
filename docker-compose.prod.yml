@@ -3,19 +3,21 @@ version: "3.8"
 services:
   backend:
     build:
-      context: ./backend
+      context: ../recruitment-system/backend
       dockerfile: Dockerfile      # Production Dockerfile
     container_name: recruitment-backend
     restart: always
     ports:
       - "5000:5000"
     env_file:
-      - ./backend/.env
+      - ../recruitment-system/backend/.env
     depends_on:
       - db
 
   frontend:
-    build: ./frontend
+    build:
+      context: ../recruitment-system/frontend
+      dockerfile: Dockerfile
     container_name: recruitment-frontend
     restart: always
     ports:
