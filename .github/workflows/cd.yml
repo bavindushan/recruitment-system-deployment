@@ -3,13 +3,17 @@ name: CD Deployment
 on:
   push:
     branches: [ main ]  # Trigger deployment when main branch is updated
-    
+
 jobs:
   deploy:
     runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Log in to GHCR
+        run: |
+          echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
 
       - name: Deploy to On-Prem Server
         run: |
@@ -18,4 +22,5 @@ jobs:
           docker pull ghcr.io/${{ secrets.GHCR_USERNAME }}/recruitment-frontend:latest
           docker compose -f docker-compose.dev.yml down
           docker compose -f docker-compose.dev.yml up -d
+
 
