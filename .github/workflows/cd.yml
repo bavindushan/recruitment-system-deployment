@@ -1,26 +1,49 @@
 name: CD Deployment
 
 on:
-  push:
-    branches: [ main ]  # Trigger deployment when main branch is updated
+  workflow_dispatch:
+    inputs:
+      service:
+        description: "Which service to deploy"
+        required: true
+        default: "both"
+        type: choice
+        options:
+          - backend
+          - frontend
+          - both
+
+  repository_dispatch:
+    types: [deploy-backend, deploy-frontend]
 
 jobs:
   deploy:
     runs-on: self-hosted
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Log in to GHCR
         run: |
           echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
 
-      - name: Deploy to On-Prem Server
+      - name: Deploy backend
+        if: |
+          github.event_name == 'workflow_dispatch' && 
+          (github.event.inputs.service == 'backend' || github.event.inputs.service == 'both') ||
+          github.event_name == 'repository_dispatch' && github.event.action == 'deploy-backend'
         run: |
           cd ~/GWUIM-recruitment/deployment
           docker pull ghcr.io/${{ secrets.GHCR_USERNAME }}/recruitment-backend:latest
+          docker compose -f docker-compose.dev.yml up -d backend
+
+      - name: Deploy frontend
+        if: |
+          github.event_name == 'workflow_dispatch' && 
+          (github.event.inputs.service == 'frontend' || github.event.inputs.service == 'both') ||
+          github.event_name == 'repository_dispatch' && github.event.action == 'deploy-frontend'
+        run: |
+          cd ~/GWUIM-recruitment/deployment
           docker pull ghcr.io/${{ secrets.GHCR_USERNAME }}/recruitment-frontend:latest
-          docker compose -f docker-compose.dev.yml down
-          docker compose -f docker-compose.dev.yml up -d
-
-
+          docker compose -f docker-compose.dev.yml up -d frontend
