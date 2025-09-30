@@ -3,29 +3,19 @@ name: CD Deployment
 on:
   push:
     branches: [ main ]  # Trigger deployment when main branch is updated
-
+    
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup SSH key
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.CD_PRIVATE_KEY }}
-
       - name: Deploy to On-Prem Server
         run: |
-          ssh -o StrictHostKeyChecking=no -p 2223 gwu@10.0.3.2 << 'EOF'
-            cd ~/GWUIM-recruitment/deployment
-            # Pull the latest backend image
-            docker pull ghcr.io/${{ secrets.GHCR_USERNAME }}/recruitment-backend:latest
-            # Pull the latest frontend image
-            docker pull ghcr.io/${{ secrets.GHCR_USERNAME }}/recruitment-frontend:latest
-            # Restart containers
-            docker compose -f docker-compose.dev.yml down
-            docker compose -f docker-compose.dev.yml up -d
-          EOF
+          cd ~/GWUIM-recruitment/deployment
+          docker pull ghcr.io/${{ secrets.GHCR_USERNAME }}/recruitment-backend:latest
+          docker pull ghcr.io/${{ secrets.GHCR_USERNAME }}/recruitment-frontend:latest
+          docker compose -f docker-compose.dev.yml down
+          docker compose -f docker-compose.dev.yml up -d
+
