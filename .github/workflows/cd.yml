@@ -32,7 +32,7 @@ jobs:
         run: |
           cd ~/GWUIM-recruitment/deployment/terraform
           terraform init
-          terraform apply -auto-approve
+          terraform apply -auto-approve -var "grafana_admin_password=${{ secrets.GRAFANA_ADMIN_PASSWORD }}"
 
       - name: Deploy backend
         if: |
