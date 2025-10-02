@@ -28,6 +28,12 @@ jobs:
         run: |
           echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
 
+      - name: Terraform Init & Apply
+        run: |
+          cd ~/GWUIM-recruitment/deployment/terraform
+          terraform init
+          terraform apply -auto-approve
+
       - name: Deploy backend
         if: |
           github.event_name == 'workflow_dispatch' && 
