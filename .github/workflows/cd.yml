@@ -36,17 +36,17 @@ jobs:
 
       - name: Generate .env file
         run: |
-          cd ~/GWUIM-recruitment/deployment
-          echo "PORT=${{ secrets.BACKEND_PORT }}" > .env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-          echo "OTP_EXPIRATION_MINUTES=${{ secrets.OTP_EXPIRATION_MINUTES }}" >> .env
-          echo "SMS_API_USERNAME=${{ secrets.SMS_API_USERNAME }}" >> .env
-          echo "SMS_API_PASSWORD=${{ secrets.SMS_API_PASSWORD }}" >> .env
-          echo "SMS_API_URL=${{ secrets.SMS_API_URL }}" >> .env
+          mkdir -p ~/GWUIM-recruitment/recruitment-system/backend
+          echo "PORT=${{ secrets.BACKEND_PORT }}" > ~/GWUIM-recruitment/recruitment-system/backend/.env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> ~/GWUIM-recruitment/recruitment-system/backend/.env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> ~/GWUIM-recruitment/recruitment-system/backend/.env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> ~/GWUIM-recruitment/recruitment-system/backend/.env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> ~/GWUIM-recruitment/recruitment-system/backend/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ~/GWUIM-recruitment/recruitment-system/backend/.env
+          echo "OTP_EXPIRATION_MINUTES=${{ secrets.OTP_EXPIRATION_MINUTES }}" >> ~/GWUIM-recruitment/recruitment-system/backend/.env
+          echo "SMS_API_USERNAME=${{ secrets.SMS_API_USERNAME }}" >> ~/GWUIM-recruitment/recruitment-system/backend/.env
+          echo "SMS_API_PASSWORD=${{ secrets.SMS_API_PASSWORD }}" >> ~/GWUIM-recruitment/recruitment-system/backend/.env
+          echo "SMS_API_URL=${{ secrets.SMS_API_URL }}" >> ~/GWUIM-recruitment/recruitment-system/backend/.env
 
       - name: Deploy backend
         if: |
