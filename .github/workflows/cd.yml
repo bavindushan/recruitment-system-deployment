@@ -34,6 +34,20 @@ jobs:
           terraform init
           terraform apply -auto-approve -var "grafana_admin_password=${{ secrets.GRAFANA_ADMIN_PASSWORD }}"
 
+      - name: Generate .env file
+        run: |
+          cd ~/GWUIM-recruitment/deployment
+          echo "PORT=${{ secrets.BACKEND_PORT }}" > .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "OTP_EXPIRATION_MINUTES=${{ secrets.OTP_EXPIRATION_MINUTES }}" >> .env
+          echo "SMS_API_USERNAME=${{ secrets.SMS_API_USERNAME }}" >> .env
+          echo "SMS_API_PASSWORD=${{ secrets.SMS_API_PASSWORD }}" >> .env
+          echo "SMS_API_URL=${{ secrets.SMS_API_URL }}" >> .env
+
       - name: Deploy backend
         if: |
           github.event_name == 'workflow_dispatch' && 
