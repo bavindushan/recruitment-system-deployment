@@ -11,7 +11,7 @@ resource "docker_container" "grafana" {
     external = 3000
   }
 
-  volume {
+  volumes {
     host_path      = "/home/gwu/GWUIM-recruitment/deployment/monitoring/dashboards"
     container_path = "/var/lib/grafana/dashboards"
   }
